@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora de Miopatia</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: auto; }
+        label { display: block; margin-top: 10px; }
+        input { width: 100%; padding: 5px; }
+        button { margin-top: 15px; padding: 10px; }
+        #resultado { margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Calculadora de Miopatia</h1>
+    <form id="formulario">
+        <label>PacienteID <input type="text" name="PacienteID"></label>
+        <label>Gênero (1=Masculino,2=Feminino) <input type="number" name="Genero"></label>
+        <label>Idade <input type="number" name="Idade"></label>
+        <label>Dor Presente (0/1) <input type="number" name="Dor_Presente"></label>
+        <label>Mialgia Status (0/1) <input type="number" name="Mialgia_Status"></label>
+        <label>Fadiga Status (0/1) <input type="number" name="Fadiga_Status"></label>
+        <label>Caibra Status (0/1) <input type="number" name="Caibra_Status"></label>
+        <button type="submit">Enviar</button>
+    </form>
+    <div id="resultado"></div>
+    <script>
+        document.getElementById('formulario').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const dados = Object.fromEntries(new FormData(e.target).entries());
+            const resp = await fetch('/prever', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dados)
+            });
+            const out = await resp.json();
+            document.getElementById('resultado').innerText = 'Diagnóstico: ' + out.resultado;
+        });
+    </script>
+</body>
+</html>
