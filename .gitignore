@@ -1,0 +1,8 @@
+# Ignorar arquivos/diretórios gerados por instalação de pacotes Python
+*.egg-info/
+__pycache__/
+*.pyc
+.env
+.venv
+venv/
+.env*/
