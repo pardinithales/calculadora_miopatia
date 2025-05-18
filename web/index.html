@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Calculadora de Miopatia</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 40px; }
+label { display: block; margin-top: 10px; }
+#resultado { margin-top: 20px; font-weight: bold; }
+</style>
+</head>
+<body>
+<h1>Teste da Calculadora</h1>
+<label for="modelo">Modelo:</label>
+<select id="modelo">
+  <option value="SVM_Linear">SVM_Linear</option>
+  <option value="SVM_Radial">SVM_Radial</option>
+  <option value="SVM_Poly">SVM_Poly</option>
+  <option value="MLP">MLP</option>
+  <option value="Adaboost">Adaboost</option>
+  <option value="DecisionTree">DecisionTree</option>
+  <option value="RandomForest">RandomForest</option>
+  <option value="GradientBoosting">GradientBoosting</option>
+  <option value="LogisticRegression">LogisticRegression</option>
+  <option value="KNN">KNN</option>
+  <option value="ExtraTrees">ExtraTrees</option>
+  <option value="NaiveBayes">NaiveBayes</option>
+  <option value="Bagging">Bagging</option>
+  <option value="SGD">SGD</option>
+</select>
+<label for="features">Features (valores separados por vírgula):</label>
+<input id="features" size="80" placeholder="1,2,3,4" />
+<button id="enviar">Enviar</button>
+<div id="resultado"></div>
+<script>
+async function enviar() {
+  const modelo = document.getElementById('modelo').value;
+  const texto = document.getElementById('features').value;
+  const features = texto.split(',').map(v => parseFloat(v.trim())).filter(v => !Number.isNaN(v));
+  const resp = await fetch('/predict', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ modelo, features })
+  });
+  const data = await resp.json();
+  if (data.erro) {
+    document.getElementById('resultado').textContent = 'Erro: ' + data.erro;
+  } else {
+    document.getElementById('resultado').textContent = 'Predição: ' + data.predicao;
+  }
+}
+document.getElementById('enviar').addEventListener('click', enviar);
+</script>
+</body>
+</html>
